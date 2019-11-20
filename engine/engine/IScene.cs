@@ -1,6 +1,6 @@
 ﻿using OpenTK;
 
-namespace Engine
+namespace engine
 {
     //Scene interface that all scenes must follow
     internal interface IScene

@@ -1,25 +1,56 @@
-﻿using OpenTK;
+﻿using engine;
+using engine.Components;
+using engine.Managers;
+using engine.Systems;
+using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
-namespace Engine
+namespace engine
 {
     class DefaultScene : Scene
     {
-
+        private EntityManager entityManager;
+        private SystemManager systemManager;
         private float clearRed, clearGreen, clearBlue;
         public DefaultScene(SceneManager sceneManager) : base(sceneManager)
         {
             sceneType = SceneType.INIT;
 
+            entityManager = new EntityManager();
+            systemManager = new SystemManager();
+
             sceneManager.RenderEvent = Render;
             sceneManager.UpdateEvent = Update;
-
+            
             clearRed = 1f;
             clearBlue = 0f;
             clearGreen = 0f;
+
+            CreateEntities();
+            CreateSystems();
         }
         public override void Close()
         {
+        }
+        private void CreateEntities()
+        {
+            Entity entity = new Entity("Test");
+            entity.AddComponent(new ComponentTransform(new Vector3(100,0,0), new Vector3(0,0,0), new Vector3(1f,1f,1)));
+            entity.AddComponent(new ComponentShape2D(ShapeTypes.Square, new Vector2(100, 100)));
+            entity.AddComponent(new ComponentColour(new Vector4(1,0.8f,0.5f,1)));
+            entityManager.AddEntity(entity);
+
+            entity = new Entity("Test2");
+            entity.AddComponent(new ComponentTransform(new Vector3(-200, 50, 0), new Vector3(0, 0, (float)Math.PI/4), new Vector3(1f, 1f, 1)));
+            entity.AddComponent(new ComponentShape2D(ShapeTypes.Triangle, new Vector2(250, 200)));
+            entity.AddComponent(new ComponentColour(new Vector4(0, 1f, 0.2f, 1)));
+            entityManager.AddEntity(entity);
+        }
+        private void CreateSystems()
+        {
+            ISystem system;
+            system = new SystemRender2D();
+            systemManager.AddSystem(system);
         }
 
         public override void Render(FrameEventArgs e)
@@ -32,6 +63,8 @@ namespace Engine
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
 
+            systemManager.ActionSystems(entityManager);
+
         }
 
         private float time = 0;
@@ -41,6 +74,42 @@ namespace Engine
             clearRed = 0.2f + (0.2f * (float)(Math.Sin(time * 0.5f)));
             clearBlue = 0.2f + (0.2f * (float)(Math.Sin(time * 0.8f)));
             clearGreen = 0.2f + (0.2f * (float)(Math.Sin(time * 1.1f)));
+
+            Entity entity = entityManager.Entities.Find(ent => ent.Name == "Test");
+            ComponentTransform compTransform = (ComponentTransform)entity.Components.Find(c => c.ComponentType == ComponentTypes.COMP_TRANSFORM);
+            Vector3 rotation = compTransform.Rotation;
+            rotation.Z += (float)Math.PI / 10 * (float)e.Time;
+            compTransform.Rotation = rotation;
+
+            Vector3 position = compTransform.Position;
+            if (upping)
+                position.Y += 100f * (float)e.Time;
+            else
+                position.Y -= 100f * (float)e.Time;
+
+            if (position.Y >= 400)
+                upping = false;
+            if (position.Y <= -400)
+                upping = true;
+
+            if (horizontalling)
+                position.X += 100f * (float)e.Time;
+            else
+                position.X -= 100f * (float)e.Time;
+
+            if (position.X >= 750)
+                horizontalling = false;
+            if (position.X <= -750)
+                horizontalling = true;
+            compTransform.Position = position;
+
+            entity = entityManager.Entities.Find(ent => ent.Name == "Test2");
+            compTransform = (ComponentTransform)entity.Components.Find(c => c.ComponentType == ComponentTypes.COMP_TRANSFORM);
+            rotation = compTransform.Rotation;
+            rotation.Z -= (float)Math.PI / 10 * (float)e.Time;
+            compTransform.Rotation = rotation;
         }
+        private bool upping = true;
+        private bool horizontalling = true;
     }
 }

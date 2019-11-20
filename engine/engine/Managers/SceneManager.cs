@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using OpenTK;
 using OpenTK.Audio;
 
-namespace Engine
+namespace engine.Managers
 {
     class SceneManager
     {

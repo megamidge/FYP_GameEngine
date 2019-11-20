@@ -1,7 +1,8 @@
 ﻿using System;
+using engine.Managers;
 using OpenTK;
 
-namespace Engine
+namespace engine
 {
     abstract class Scene : IScene
     {
