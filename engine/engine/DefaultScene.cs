@@ -34,16 +34,22 @@ namespace engine
         }
         private void CreateEntities()
         {
-            Entity entity = new Entity("Test");
-            entity.AddComponent(new ComponentTransform(new Vector3(100,0,0), new Vector3(0,0,0), new Vector3(1f,1f,1)));
+            Entity entity = new Entity("Bouncing_Square");
+            entity.AddComponent(new ComponentTransform(new Vector3(100,0,-1f), new Vector3(0,0,0), new Vector3(1f,1f,1)));
             entity.AddComponent(new ComponentShape2D(ShapeTypes.Square, new Vector2(100, 100)));
             entity.AddComponent(new ComponentColour(new Vector4(1,0.8f,0.5f,1)));
             entityManager.AddEntity(entity);
 
-            entity = new Entity("Test2");
-            entity.AddComponent(new ComponentTransform(new Vector3(-200, 50, 0), new Vector3(0, 0, (float)Math.PI/4), new Vector3(1f, 1f, 1)));
+            entity = new Entity("Triangle");
+            entity.AddComponent(new ComponentTransform(new Vector3(-200, 50, -2f), new Vector3(0, 0, (float)Math.PI/4), new Vector3(1f, 1f, 1)));
             entity.AddComponent(new ComponentShape2D(ShapeTypes.Triangle, new Vector2(250, 200)));
             entity.AddComponent(new ComponentColour(new Vector4(0, 1f, 0.2f, 1)));
+            entityManager.AddEntity(entity);
+
+            entity = new Entity("Rectangle");
+            entity.AddComponent(new ComponentTransform(new Vector3(0, -300, 0), new Vector3(0, 0, 0), new Vector3(1f, 1f, 1)));
+            entity.AddComponent(new ComponentShape2D(ShapeTypes.Square, new Vector2(400, 200)));
+            entity.AddComponent(new ComponentColour(new Vector4(0, 0f, 0.7f, 1)));
             entityManager.AddEntity(entity);
         }
         private void CreateSystems()
@@ -75,7 +81,8 @@ namespace engine
             clearBlue = 0.2f + (0.2f * (float)(Math.Sin(time * 0.8f)));
             clearGreen = 0.2f + (0.2f * (float)(Math.Sin(time * 1.1f)));
 
-            Entity entity = entityManager.Entities.Find(ent => ent.Name == "Test");
+            //Animate bouncing square
+            Entity entity = entityManager.Entities.Find(ent => ent.Name == "Bouncing_Square");
             ComponentTransform compTransform = (ComponentTransform)entity.Components.Find(c => c.ComponentType == ComponentTypes.COMP_TRANSFORM);
             Vector3 rotation = compTransform.Rotation;
             rotation.Z += (float)Math.PI / 10 * (float)e.Time;
@@ -103,7 +110,8 @@ namespace engine
                 horizontalling = true;
             compTransform.Position = position;
 
-            entity = entityManager.Entities.Find(ent => ent.Name == "Test2");
+            //Animate triangle
+            entity = entityManager.Entities.Find(ent => ent.Name == "Triangle");
             compTransform = (ComponentTransform)entity.Components.Find(c => c.ComponentType == ComponentTypes.COMP_TRANSFORM);
             rotation = compTransform.Rotation;
             rotation.Z -= (float)Math.PI / 10 * (float)e.Time;
