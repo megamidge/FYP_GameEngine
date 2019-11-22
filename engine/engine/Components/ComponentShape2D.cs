@@ -34,6 +34,12 @@ namespace engine.Components
             }
             LoadShape();
         }
+        public ComponentShape2D(int sides, Vector2 size, bool centerIsZero = true)
+        {
+            this.centerIsZero = centerIsZero;
+            MakeCircle(sides,size);
+            LoadShape();
+        }
 
         private void LoadShape()
         {
@@ -85,10 +91,49 @@ namespace engine.Components
             };
             indices = new uint[] { 1, 2, 0};
         }
+
+
+        private void MakeCircle(int sides, Vector2 size)
+        {
+            float top = centerIsZero ? size.Y / 2f : size.Y;
+            float bottom = centerIsZero ? -size.Y / 2f : 0;
+            float left = centerIsZero ? -size.X / 2f : 0;
+            float right = centerIsZero ? size.X / 2f : size.X;
+            float middle = centerIsZero ? 0 : size.X / 2f;
+
+            //following is broken - draws half as many sides as it should.
+            //Need to figure out how to actually do it.
+
+            vertices = new float[2 + sides * 2];
+            indices = new uint[sides+1];
+
+            vertices[0] = 0; vertices[1] = 0;
+            for (uint i = 2; i < sides*2; i+=2)
+            {
+                double theta = 2f * Math.PI * i / sides;
+                double X = size.X * Math.Sin(-theta);
+                double Y = size.Y * Math.Cos(-theta);
+
+                if (!centerIsZero)
+                {
+                    X += size.X / 2f;
+                    Y += size.Y / 2f;
+                }
+
+
+                vertices[i] = (float)X;
+                vertices[i + 1] = (float)Y;
+            }
+
+            indices[0] = 0;
+            for (uint i = 1; i <= sides; i++)
+                indices[i] = i;
+        }
     }
     enum ShapeTypes
     {
         Square,
-        Triangle
+        Triangle,
+        Circle,
     }
 }

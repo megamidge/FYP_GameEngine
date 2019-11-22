@@ -47,7 +47,7 @@ namespace engine
             entityManager.AddEntity(entity);
 
             entity = new Entity("Rectangle");
-            entity.AddComponent(new ComponentTransform(new Vector3(400, 300, 0), new Vector3(0, 0, 0), new Vector3(1f, 1f, 1)));
+            entity.AddComponent(new ComponentTransform(new Vector3(400, 0, 0), new Vector3(0, 0, 0), new Vector3(1f, 1f, 1)));
             entity.AddComponent(new ComponentShape2D(ShapeTypes.Square, new Vector2(200, 100)));
             entity.AddComponent(new ComponentColour(new Vector4(0, 0f, 0.7f, 1)));
             entityManager.AddEntity(entity);
@@ -55,6 +55,11 @@ namespace engine
             entity = new Entity("Square");
             entity.AddComponent(new ComponentShape2D(ShapeTypes.Square, new Vector2(100, 100), false));
             entity.AddComponent(new ComponentTransform(new Vector3(0, 0, 0)));
+            entityManager.AddEntity(entity);
+
+            entity = new Entity("Circle");
+            entity.AddComponent(new ComponentShape2D(10, new Vector2(100, 100)));
+            entity.AddComponent(new ComponentTransform(new Vector3(sceneManager.Width / 2f, sceneManager.Height / 2f, 0)));
             entityManager.AddEntity(entity);
         }
         private void CreateSystems()

@@ -92,7 +92,7 @@ namespace engine.Systems
             GL.EnableVertexAttribArray(vPositionLocation);
             GL.VertexAttribPointer(vPositionLocation, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), 0);
             
-            GL.DrawElements(PrimitiveType.Triangles, elementCount, DrawElementsType.UnsignedInt, 0);
+            GL.DrawElements(PrimitiveType.TriangleStrip, elementCount, DrawElementsType.UnsignedInt, 0);
                        
             GL.UseProgram(0);
         }

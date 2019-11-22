@@ -26,9 +26,10 @@ namespace Engine
             GL.Enable(EnableCap.DepthTest);
             GL.DepthMask(true);
 
-            sceneManager.Start();
             sceneManager.Width = Width;
             sceneManager.Height = Height;
+
+            sceneManager.Start();
 
             GL.PointSize(4);
 
