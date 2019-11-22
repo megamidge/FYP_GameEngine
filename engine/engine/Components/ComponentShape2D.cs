@@ -59,11 +59,6 @@ namespace engine.Components
         }
         private void MakeSquare(Vector2 size)
         {
-            //h and v represent half the vertical and horizontal size - half to make 
-            //the vertice writing easier, and centered around 0.
-            float h = size.X / 2f;
-            float v = size.Y / 2f;
-
             float top = centerIsZero ? size.Y / 2f : size.Y;
             float bottom = centerIsZero ? -size.Y/ 2f : 0;
             float left = centerIsZero ? -size.X / 2f : 0;
@@ -78,12 +73,15 @@ namespace engine.Components
         }
         private void MakeTriangle(Vector2 size)
         {
-            float h = size.X / 2f;
-            float v = size.Y / 2f;
+            float top = centerIsZero ? size.Y / 2f : size.Y;
+            float bottom = centerIsZero ? -size.Y / 2f : 0;
+            float left = centerIsZero ? -size.X / 2f : 0;
+            float right = centerIsZero ? size.X / 2f : size.X;
+            float middle = centerIsZero ? 0 : size.X / 2f;
             vertices = new float[] {
-                0f,v,
-                -h,-v,
-                h,-v,
+                middle,top,
+                left,bottom,
+                right,bottom,
             };
             indices = new uint[] { 1, 2, 0};
         }
