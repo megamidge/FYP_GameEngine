@@ -71,11 +71,14 @@ namespace engine.Systems
 
         public void Draw(Matrix4 modelMat, Vector4 colour, int vertBuffer, int elBuffer, int elementCount)
         {
+            Matrix4 viewMat = Matrix4.Identity;
+            viewMat *= Matrix4.CreateTranslation(new Vector3(-SceneManager.Instance.Width/2f, -SceneManager.Instance.Height/2f, 0));
+
             GL.UseProgram(shaderProgramID);
 
             int uniModelMat = GL.GetUniformLocation(shaderProgramID, "ModelMat");
             GL.UniformMatrix4(uniModelMat, false, ref modelMat);
-            Matrix4 modelViewProjectionMat = modelMat * Matrix4.CreateOrthographic(SceneManager.Instance.Width, SceneManager.Instance.Height, 0, 50);
+            Matrix4 modelViewProjectionMat = modelMat * viewMat * Matrix4.CreateOrthographic(SceneManager.Instance.Width, SceneManager.Instance.Height, 0, 50);
             int uniMVP = GL.GetUniformLocation(shaderProgramID, "ModelViewProjectionMat");
             GL.UniformMatrix4(uniMVP, false, ref modelViewProjectionMat);
 

@@ -1,6 +1,7 @@
 ﻿using engine.Managers;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Input;
 using System;
 
 namespace Engine
@@ -28,6 +29,10 @@ namespace Engine
             sceneManager.Start();
             sceneManager.Width = Width;
             sceneManager.Height = Height;
+
+            GL.PointSize(4);
+
+            GL.Viewport(0, 0, Width, Height);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
@@ -48,6 +53,28 @@ namespace Engine
             base.OnResize(e);
             sceneManager.Width = Width;
             sceneManager.Height = Height;
+
+            GL.Viewport(0, 0, Width, Height);
         }
+
+        protected override void OnKeyDown(KeyboardKeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+
+            //Cycle poly modes
+            if(e.Key == Key.F1)
+            {
+                int polyModeInt;
+                GL.GetInteger(GetPName.PolygonMode, out polyModeInt);
+                Array polyVals = Enum.GetValues(typeof(PolygonMode));
+                int min = (int)polyVals.GetValue(0);
+                int max = (int)polyVals.GetValue(polyVals.Length-1);
+                polyModeInt++;
+                if (polyModeInt > max)
+                    polyModeInt = min;
+                GL.PolygonMode(MaterialFace.FrontAndBack, (PolygonMode)polyModeInt);
+            }
+        }
+
     }
 }

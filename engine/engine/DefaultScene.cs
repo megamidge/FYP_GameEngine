@@ -35,21 +35,26 @@ namespace engine
         private void CreateEntities()
         {
             Entity entity = new Entity("Bouncing_Square");
-            entity.AddComponent(new ComponentTransform(new Vector3(100,0,-1f), new Vector3(0,0,0), new Vector3(1f,1f,1)));
+            entity.AddComponent(new ComponentTransform(new Vector3(100,100,-1f), new Vector3(0,0,0), new Vector3(1f,1f,1)));
             entity.AddComponent(new ComponentShape2D(ShapeTypes.Square, new Vector2(100, 100)));
             entity.AddComponent(new ComponentColour(new Vector4(1,0.8f,0.5f,1)));
             entityManager.AddEntity(entity);
 
             entity = new Entity("Triangle");
-            entity.AddComponent(new ComponentTransform(new Vector3(-200, 50, -2f), new Vector3(0, 0, (float)Math.PI/4), new Vector3(1f, 1f, 1)));
+            entity.AddComponent(new ComponentTransform(new Vector3(200, 259, -2f), new Vector3(0, 0, (float)Math.PI/4), new Vector3(1f, 1f, 1)));
             entity.AddComponent(new ComponentShape2D(ShapeTypes.Triangle, new Vector2(250, 200)));
             entity.AddComponent(new ComponentColour(new Vector4(0, 1f, 0.2f, 1)));
             entityManager.AddEntity(entity);
 
             entity = new Entity("Rectangle");
-            entity.AddComponent(new ComponentTransform(new Vector3(0, -300, 0), new Vector3(0, 0, 0), new Vector3(1f, 1f, 1)));
-            entity.AddComponent(new ComponentShape2D(ShapeTypes.Square, new Vector2(400, 200)));
+            entity.AddComponent(new ComponentTransform(new Vector3(400, 300, 0), new Vector3(0, 0, 0), new Vector3(1f, 1f, 1)));
+            entity.AddComponent(new ComponentShape2D(ShapeTypes.Square, new Vector2(200, 100)));
             entity.AddComponent(new ComponentColour(new Vector4(0, 0f, 0.7f, 1)));
+            entityManager.AddEntity(entity);
+
+            entity = new Entity("Square");
+            entity.AddComponent(new ComponentShape2D(ShapeTypes.Square, new Vector2(100, 100), false));
+            entity.AddComponent(new ComponentTransform(new Vector3(0, 0, 0)));
             entityManager.AddEntity(entity);
         }
         private void CreateSystems()
@@ -94,9 +99,9 @@ namespace engine
             else
                 position.Y -= 100f * (float)e.Time;
 
-            if (position.Y >= SceneManager.Instance.Height/2f -50)
+            if (position.Y >= SceneManager.Instance.Height -50)
                 upping = false;
-            if (position.Y <= -SceneManager.Instance.Height/2f + 50)
+            if (position.Y <= 50)
                 upping = true;
 
             if (horizontalling)
@@ -104,9 +109,9 @@ namespace engine
             else
                 position.X -= 100f * (float)e.Time;
 
-            if (position.X >= SceneManager.Instance.Width/2f - 50)
+            if (position.X >= SceneManager.Instance.Width - 50)
                 horizontalling = false;
-            if (position.X <= -SceneManager.Instance.Width/2f + 50)
+            if (position.X <= 50)
                 horizontalling = true;
             compTransform.Position = position;
 

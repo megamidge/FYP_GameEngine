@@ -11,6 +11,8 @@ namespace engine.Components
     {
         public ComponentTypes ComponentType => ComponentTypes.COMP_GEOMETRY;
 
+        private bool centerIsZero;
+
         private float[] vertices;
         private uint[] indices;
 
@@ -18,8 +20,9 @@ namespace engine.Components
         public int VertexBuffer => mVertexBufferObjectIDArray[0];
         public int ElementBuffer => mVertexBufferObjectIDArray[1];
         public int ElementCount => indices.Length;
-        public ComponentShape2D(ShapeTypes shape, Vector2 size)
+        public ComponentShape2D(ShapeTypes shape, Vector2 size, bool centerIsZero = true)
         {
+            this.centerIsZero = centerIsZero;
             switch (shape)
             {
                 case ShapeTypes.Square:
@@ -60,11 +63,16 @@ namespace engine.Components
             //the vertice writing easier, and centered around 0.
             float h = size.X / 2f;
             float v = size.Y / 2f;
+
+            float top = centerIsZero ? size.Y / 2f : size.Y;
+            float bottom = centerIsZero ? -size.Y/ 2f : 0;
+            float left = centerIsZero ? -size.X / 2f : 0;
+            float right = centerIsZero ? size.X / 2f : size.X;
             vertices = new float[] {
-                -h,v,
-                h,v,
-                h,-v,
-                -h,-v
+                left,   top,
+                right,  top,
+                right,  bottom,
+                left,   bottom
             };
             indices = new uint[] { 1, 0, 3, 2, 1, 3 };
         }
