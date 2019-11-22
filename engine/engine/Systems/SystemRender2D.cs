@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using engine.Components;
+using engine.Managers;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 namespace engine.Systems
@@ -74,7 +75,7 @@ namespace engine.Systems
 
             int uniModelMat = GL.GetUniformLocation(shaderProgramID, "ModelMat");
             GL.UniformMatrix4(uniModelMat, false, ref modelMat);
-            Matrix4 modelViewProjectionMat = modelMat * Matrix4.CreateOrthographic(1600, 900, 0, 50);
+            Matrix4 modelViewProjectionMat = modelMat * Matrix4.CreateOrthographic(SceneManager.Instance.Width, SceneManager.Instance.Height, 0, 50);
             int uniMVP = GL.GetUniformLocation(shaderProgramID, "ModelViewProjectionMat");
             GL.UniformMatrix4(uniMVP, false, ref modelViewProjectionMat);
 

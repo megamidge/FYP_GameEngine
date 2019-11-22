@@ -85,8 +85,8 @@ namespace engine
             Entity entity = entityManager.Entities.Find(ent => ent.Name == "Bouncing_Square");
             ComponentTransform compTransform = (ComponentTransform)entity.Components.Find(c => c.ComponentType == ComponentTypes.COMP_TRANSFORM);
             Vector3 rotation = compTransform.Rotation;
-            rotation.Z += (float)Math.PI / 10 * (float)e.Time;
-            compTransform.Rotation = rotation;
+            //rotation.Z += (float)Math.PI / 10 * (float)e.Time;
+            //compTransform.Rotation = rotation;
 
             Vector3 position = compTransform.Position;
             if (upping)
@@ -94,9 +94,9 @@ namespace engine
             else
                 position.Y -= 100f * (float)e.Time;
 
-            if (position.Y >= 400)
+            if (position.Y >= SceneManager.Instance.Height/2f -50)
                 upping = false;
-            if (position.Y <= -400)
+            if (position.Y <= -SceneManager.Instance.Height/2f + 50)
                 upping = true;
 
             if (horizontalling)
@@ -104,9 +104,9 @@ namespace engine
             else
                 position.X -= 100f * (float)e.Time;
 
-            if (position.X >= 750)
+            if (position.X >= SceneManager.Instance.Width/2f - 50)
                 horizontalling = false;
-            if (position.X <= -750)
+            if (position.X <= -SceneManager.Instance.Width/2f + 50)
                 horizontalling = true;
             compTransform.Position = position;
 

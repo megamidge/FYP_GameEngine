@@ -10,7 +10,7 @@ namespace Engine
     {
         static void Main(string[] args)
         {
-            using (var gameWindow = new EngineGameWindow(1600,900))
+            using (var gameWindow = new EngineGameWindow(800,450))
                 gameWindow.Run();
         }
     }
