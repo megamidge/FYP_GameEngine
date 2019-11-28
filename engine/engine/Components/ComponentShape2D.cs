@@ -105,17 +105,18 @@ namespace engine.Components
             //Need to figure out how to actually do it.
 
             vertices = new float[2 + sides * 2];
-            indices = new uint[sides+1];
-
             vertices[0] = 0; vertices[1] = 0;
-            for (uint i = 2; i < sides*2; i+=2)
+            uint count = 0;
+            for (uint i = 2; i < 2+sides*2; i+=2)
             {
-                double theta = 2f * Math.PI * i / sides;
+                double theta = ((2f * Math.PI) / sides) * count;
+                count++;
                 double X = size.X * Math.Sin(-theta);
                 double Y = size.Y * Math.Cos(-theta);
 
                 if (!centerIsZero)
                 {
+                    vertices[0] = size.X / 2f; vertices[1] = size.Y / 2f;
                     X += size.X / 2f;
                     Y += size.Y / 2f;
                 }
@@ -125,9 +126,10 @@ namespace engine.Components
                 vertices[i + 1] = (float)Y;
             }
 
-            indices[0] = 0;
-            for (uint i = 1; i <= sides; i++)
+            indices = new uint[sides + 2];
+            for (uint i = 0; i < sides + 1; i++)
                 indices[i] = i;
+            indices[indices.Length - 1] = indices[1];
         }
     }
     enum ShapeTypes

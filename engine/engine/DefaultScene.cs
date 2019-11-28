@@ -58,7 +58,7 @@ namespace engine
             entityManager.AddEntity(entity);
 
             entity = new Entity("Circle");
-            entity.AddComponent(new ComponentShape2D(10, new Vector2(100, 100)));
+            entity.AddComponent(new ComponentShape2D(6, new Vector2(50, 50)));
             entity.AddComponent(new ComponentTransform(new Vector3(sceneManager.Width / 2f, sceneManager.Height / 2f, 0)));
             entityManager.AddEntity(entity);
         }
