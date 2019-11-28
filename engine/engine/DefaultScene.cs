@@ -35,31 +35,36 @@ namespace engine
         private void CreateEntities()
         {
             Entity entity = new Entity("Bouncing_Square");
-            entity.AddComponent(new ComponentTransform(new Vector3(100,100,-1f), new Vector3(0,0,0), new Vector3(1f,1f,1)));
-            entity.AddComponent(new ComponentShape2D(ShapeTypes.Square, new Vector2(100, 100)));
-            entity.AddComponent(new ComponentColour(new Vector4(1,0.8f,0.5f,1)));
+            entity.AddComponent(new ComponentTransform(new Vector3(100, 100, -1f), new Vector3(0, 0, 0), new Vector3(1f, 1f, 1)));
+            entity.AddComponent(new ComponentShape2D(4, new Vector2(100, 100)));
+            entity.AddComponent(new ComponentColour(new Vector4(1, 0.8f, 0.5f, 1)));
             entityManager.AddEntity(entity);
 
             entity = new Entity("Triangle");
             entity.AddComponent(new ComponentTransform(new Vector3(200, 259, -2f), new Vector3(0, 0, (float)Math.PI/4), new Vector3(1f, 1f, 1)));
-            entity.AddComponent(new ComponentShape2D(ShapeTypes.Triangle, new Vector2(250, 200)));
+            entity.AddComponent(new ComponentShape2D(3, new Vector2(200, 200)));
             entity.AddComponent(new ComponentColour(new Vector4(0, 1f, 0.2f, 1)));
             entityManager.AddEntity(entity);
 
             entity = new Entity("Rectangle");
             entity.AddComponent(new ComponentTransform(new Vector3(400, 0, 0), new Vector3(0, 0, 0), new Vector3(1f, 1f, 1)));
-            entity.AddComponent(new ComponentShape2D(ShapeTypes.Square, new Vector2(200, 100)));
+            entity.AddComponent(new ComponentShape2D(4, new Vector2(200, 100)));
             entity.AddComponent(new ComponentColour(new Vector4(0, 0f, 0.7f, 1)));
             entityManager.AddEntity(entity);
 
             entity = new Entity("Square");
-            entity.AddComponent(new ComponentShape2D(ShapeTypes.Square, new Vector2(100, 100), false));
+            entity.AddComponent(new ComponentShape2D(4, new Vector2(100, 100), false));
             entity.AddComponent(new ComponentTransform(new Vector3(0, 0, 0)));
             entityManager.AddEntity(entity);
 
             entity = new Entity("Circle");
-            entity.AddComponent(new ComponentShape2D(6, new Vector2(50, 50)));
+            entity.AddComponent(new ComponentShape2D(8, new Vector2(100, 100)));
             entity.AddComponent(new ComponentTransform(new Vector3(sceneManager.Width / 2f, sceneManager.Height / 2f, 0)));
+            entityManager.AddEntity(entity);
+            
+            entity = new Entity("Circle");
+            entity.AddComponent(new ComponentShape2D(8, new Vector2(100, 100)));
+            entity.AddComponent(new ComponentTransform(new Vector3(sceneManager.Width*0.75f, sceneManager.Height / 2f, 0)));
             entityManager.AddEntity(entity);
         }
         private void CreateSystems()
