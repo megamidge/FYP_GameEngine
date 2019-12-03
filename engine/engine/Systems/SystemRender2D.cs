@@ -13,28 +13,10 @@ namespace engine.Systems
     {
         private const ComponentTypes MASK = (ComponentTypes.COMP_TRANSFORM | ComponentTypes.COMP_GEOMETRY);
 
-
-        //private int[] mVertexBufferObjectIDArray = new int[2];
-
         int shaderProgramID;
-        int vertShaderID;
-        int fragShaderID;
         public SystemRender2D()
         {
-            shaderProgramID = GL.CreateProgram();
-            LoadShader("Shaders/basicVertex.glsl", ShaderType.VertexShader, shaderProgramID, out vertShaderID);
-            LoadShader("Shaders/basicFragment.glsl", ShaderType.FragmentShader, shaderProgramID, out fragShaderID);
-            GL.LinkProgram(shaderProgramID);
-            Console.WriteLine(GL.GetProgramInfoLog(shaderProgramID));            
-        }
-
-        private void LoadShader(string filename, ShaderType shaderType, int shaderProgram, out int shaderAddress)
-        {
-            shaderAddress = GL.CreateShader(shaderType);
-            GL.ShaderSource(shaderAddress, System.IO.File.ReadAllText(filename));
-            GL.CompileShader(shaderAddress);
-            GL.AttachShader(shaderProgram, shaderAddress);
-            Console.WriteLine(GL.GetShaderInfoLog(shaderAddress));
+            shaderProgramID = ShaderManager.CreateShaderProgram("Shaders/basicVertex.glsl", "Shaders/basicFragment.glsl");
         }
 
         public string Name => "SystemRender2D";
@@ -69,18 +51,22 @@ namespace engine.Systems
             Draw(modelMat, colour, vertBuffer, elBuffer, elementCount);
         }
 
-        public void Draw(Matrix4 modelMat, Vector4 colour, int vertBuffer, int elBuffer, int elementCount)
+        private void Draw(Matrix4 modelMat, Vector4 colour, int vertBuffer, int elBuffer, int elementCount)
         {
-            Matrix4 viewMat = Matrix4.Identity;
-            viewMat *= Matrix4.CreateTranslation(new Vector3(-SceneManager.Instance.Width/2f, -SceneManager.Instance.Height/2f, 0));
-
             GL.UseProgram(shaderProgramID);
 
+            Matrix4 viewMat = Matrix4.Identity;
+            viewMat *= Matrix4.CreateTranslation(new Vector3(-SceneManager.Instance.Width/2f, -SceneManager.Instance.Height/2f, 0));
+            int uniViewMat = GL.GetUniformLocation(shaderProgramID, "ViewMat");
+            GL.UniformMatrix4(uniViewMat, false, ref viewMat);
+                       
             int uniModelMat = GL.GetUniformLocation(shaderProgramID, "ModelMat");
             GL.UniformMatrix4(uniModelMat, false, ref modelMat);
-            Matrix4 modelViewProjectionMat = modelMat * viewMat * Matrix4.CreateOrthographic(SceneManager.Instance.Width, SceneManager.Instance.Height, 0, 50);
-            int uniMVP = GL.GetUniformLocation(shaderProgramID, "ModelViewProjectionMat");
-            GL.UniformMatrix4(uniMVP, false, ref modelViewProjectionMat);
+
+            Matrix4 projectionMat = Matrix4.CreateOrthographic(SceneManager.Instance.Width, SceneManager.Instance.Height, 0, 50);
+
+            Matrix4 mvpMat = modelMat * viewMat * projectionMat;
+            GL.UniformMatrix4(GL.GetUniformLocation(shaderProgramID,"ModelViewProjectionMat"), false, ref mvpMat);
 
             int uniColour = GL.GetUniformLocation(shaderProgramID, "Colour");
             GL.Uniform4(uniColour, colour);
