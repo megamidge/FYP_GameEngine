@@ -46,8 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Camera.cs" />
     <Compile Include="Components\ComponentColour.cs" />
     <Compile Include="Components\ComponentShape2D.cs" />
+    <Compile Include="Components\ComponentShape3D.cs" />
     <Compile Include="Components\ComponentTransform.cs" />
     <Compile Include="EngineGameWindow.cs" />
     <Compile Include="Entity.cs" />
@@ -70,13 +72,7 @@
     <None Include="App.config" />
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
-    <None Include="Shaders\basicFragment3D.glsl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Shaders\basicFragment.glsl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Shaders\basicVertex3D.glsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\basicVertex.glsl">

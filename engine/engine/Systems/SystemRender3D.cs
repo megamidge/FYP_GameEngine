@@ -44,7 +44,6 @@ namespace engine.Systems
             modelMat *= Matrix4.CreateTranslation(transform.Position);
             modelMat *= Matrix4.CreateScale(transform.Scale);
 
-
             IComponent colourComp = entityComponents.Find(c => c.ComponentType == ComponentTypes.COMP_COLOUR);
             Vector4 colour = new Vector4(1, 1, 1, 1);
             if (colourComp != null)
@@ -57,23 +56,10 @@ namespace engine.Systems
         {
             GL.UseProgram(shaderProgramID);
             
-            Matrix4 viewMat = Matrix4.Identity;
-            viewMat *= Matrix4.CreateTranslation(new Vector3(-SceneManager.Instance.Width / 2f, -SceneManager.Instance.Height / 2f, -10f));
-            Vector3 camPos = new Vector3(0, 0, 100);
-            Vector3 targetPos = new Vector3(0, 0, 0);
-            Vector3 camDir = (targetPos - camPos).Normalized();
-            Vector3 camUp = new Vector3(0, 1, 0);
-            viewMat *= Matrix4.LookAt(camPos, camPos + camDir, camUp);
-
-            int uniViewMat = GL.GetUniformLocation(shaderProgramID, "ViewMat");
-            GL.UniformMatrix4(uniViewMat, false, ref viewMat);
-
             int uniModelMat = GL.GetUniformLocation(shaderProgramID, "ModelMat");
             GL.UniformMatrix4(uniModelMat, false, ref modelMat);
 
-            Matrix4 projectionMat = Matrix4.CreatePerspectiveFieldOfView(170 * (float)Math.PI / 180, SceneManager.Instance.Width / SceneManager.Instance.Height, 0.01f, 1000);
-
-            Matrix4 mvpMat = modelMat * viewMat * projectionMat;
+            Matrix4 mvpMat = modelMat * DefaultScene.instance.camera.view * DefaultScene.instance.camera.projection;
             GL.UniformMatrix4(GL.GetUniformLocation(shaderProgramID, "ModelViewProjectionMat"), false, ref mvpMat);
 
             int uniColour = GL.GetUniformLocation(shaderProgramID, "Colour");

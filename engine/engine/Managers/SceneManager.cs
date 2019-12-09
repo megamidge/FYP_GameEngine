@@ -39,5 +39,6 @@ namespace engine.Managers
         {
             currentScene = new DefaultScene(this);
         }
+
     }
 }

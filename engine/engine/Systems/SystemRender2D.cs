@@ -57,8 +57,6 @@ namespace engine.Systems
 
             Matrix4 viewMat = Matrix4.Identity;
             viewMat *= Matrix4.CreateTranslation(new Vector3(-SceneManager.Instance.Width/2f, -SceneManager.Instance.Height/2f, 0));
-            int uniViewMat = GL.GetUniformLocation(shaderProgramID, "ViewMat");
-            GL.UniformMatrix4(uniViewMat, false, ref viewMat);
                        
             int uniModelMat = GL.GetUniformLocation(shaderProgramID, "ModelMat");
             GL.UniformMatrix4(uniModelMat, false, ref modelMat);

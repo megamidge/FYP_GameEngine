@@ -9,11 +9,15 @@ namespace engine
 {
     class DefaultScene : Scene
     {
+        public static DefaultScene instance;
+        public Camera camera;
         private EntityManager entityManager;
         private SystemManager systemManager;
         private float clearRed, clearGreen, clearBlue;
         public DefaultScene(SceneManager sceneManager) : base(sceneManager)
         {
+            instance = this;
+            camera = new Camera();
             sceneType = SceneType.INIT;
 
             entityManager = new EntityManager();
@@ -47,14 +51,14 @@ namespace engine
             entityManager.AddEntity(entity);
 
             entity = new Entity("Rectangle");
-            entity.AddComponent(new ComponentTransform(new Vector3(400, 50, 0), new Vector3(0, 2f, 0), new Vector3(1f, 1f, 1)));
+            entity.AddComponent(new ComponentTransform(new Vector3(400, 50, 0), new Vector3(0, 1f, 0), new Vector3(1f, 1f, 1)));
             entity.AddComponent(new ComponentShape2D(4, new Vector2(200, 100)));
             entity.AddComponent(new ComponentColour(new Vector4(0, 0f, 0.7f, 1)));
             entityManager.AddEntity(entity);
 
             entity = new Entity("Square");
             entity.AddComponent(new ComponentShape2D(4, new Vector2(100, 100), false));
-            entity.AddComponent(new ComponentTransform(new Vector3(0, 0, 0)));
+            entity.AddComponent(new ComponentTransform(new Vector3(20, 20, 0)));
             entityManager.AddEntity(entity);
 
             entity = new Entity("Circle");
@@ -65,7 +69,7 @@ namespace engine
         private void CreateSystems()
         {
             ISystem system;
-            system = new SystemRender3D();
+            system = new SystemRender2D();
             systemManager.AddSystem(system);
         }
 
@@ -86,6 +90,8 @@ namespace engine
         private float time = 0;
         public override void Update(FrameEventArgs e)
         {
+            camera.UpdateProjection();
+
             time += (float)e.Time;
             clearRed = 0.2f + (0.2f * (float)(Math.Sin(time * 0.5f)));
             clearBlue = 0.2f + (0.2f * (float)(Math.Sin(time * 0.8f)));
@@ -125,6 +131,13 @@ namespace engine
             compTransform = (ComponentTransform)entity.Components.Find(c => c.ComponentType == ComponentTypes.COMP_TRANSFORM);
             rotation = compTransform.Rotation;
             rotation.Z -= (float)Math.PI / 10 * (float)e.Time;
+            compTransform.Rotation = rotation;
+
+            //Animate rectangle
+            entity = entityManager.Entities.Find(ent => ent.Name == "Rectangle");
+            compTransform = (ComponentTransform)entity.Components.Find(c => c.ComponentType == ComponentTypes.COMP_TRANSFORM);
+            rotation = compTransform.Rotation;
+            rotation.Y -= MathHelper.DegreesToRadians(100) * (float)e.Time;
             compTransform.Rotation = rotation;
         }
         private bool upping = true;

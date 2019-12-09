@@ -2,7 +2,6 @@
 layout (location = 0) in vec3 vPosition;
 
 uniform mat4 ModelViewProjectionMat;
-uniform mat4 ViewMat;
 uniform mat4 ModelMat;
 
 out vec3 v_FragPos;
