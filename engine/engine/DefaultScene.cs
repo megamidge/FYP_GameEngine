@@ -45,7 +45,7 @@ namespace engine
             entityManager.AddEntity(entity);
 
             entity = new Entity("Triangle");
-            entity.AddComponent(new ComponentTransform(new Vector3(200, 259, -2f), new Vector3(0, 0, (float)Math.PI/4), new Vector3(1f, 1f, 1)));
+            entity.AddComponent(new ComponentTransform(new Vector3(200, 259, -2f), new Vector3(0, 0, (float)Math.PI / 4), new Vector3(1f, 1f, 1)));
             entity.AddComponent(new ComponentShape2D(3, new Vector2(200, 200)));
             entity.AddComponent(new ComponentColour(new Vector4(0, 1f, 0.2f, 1)));
             entityManager.AddEntity(entity);
@@ -58,12 +58,18 @@ namespace engine
 
             entity = new Entity("Square");
             entity.AddComponent(new ComponentShape2D(4, new Vector2(100, 100), false));
-            entity.AddComponent(new ComponentTransform(new Vector3(20, 20, 0)));
+            entity.AddComponent(new ComponentTransform(new Vector3(20, 20, -1)));
             entityManager.AddEntity(entity);
 
             entity = new Entity("Circle");
             entity.AddComponent(new ComponentShape2D(8, new Vector2(100, 100)));
             entity.AddComponent(new ComponentTransform(new Vector3(sceneManager.Width / 2f, sceneManager.Height / 2f - 50, 0)));
+            entityManager.AddEntity(entity);
+
+            entity = new Entity("Circle");
+            entity.AddComponent(new ComponentShape2D(8, new Vector2(100, 100),false));
+            entity.AddComponent(new ComponentTransform(new Vector3(0,0,0)));
+            entity.AddComponent(new ComponentColour(new Vector4(0.3f, 0f, 0.7f, 1)));
             entityManager.AddEntity(entity);
         }
         private void CreateSystems()
@@ -110,7 +116,7 @@ namespace engine
             else
                 position.Y -= 100f * (float)e.Time;
 
-            if (position.Y >= SceneManager.Instance.Height -50)
+            if (position.Y >= SceneManager.Instance.Height - 50)
                 upping = false;
             if (position.Y <= 50)
                 upping = true;

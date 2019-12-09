@@ -43,8 +43,8 @@ namespace engine.Managers
             {
                 double theta = ((2f * Math.PI) / sides) * count;
                 count++;
-                double X = size.X * Math.Sin(-theta);
-                double Y = size.Y * Math.Cos(-theta);
+                double X = size.X/2f * Math.Sin(-theta);
+                double Y = size.Y/2f * Math.Cos(-theta);
 
                 if (!centerIsZero)
                 {
