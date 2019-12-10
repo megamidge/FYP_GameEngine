@@ -9,25 +9,12 @@ using engine.Managers;
 
 namespace engine.Components
 {
-    class ComponentShape2D : IComponent
+    class ComponentShape2D : ComponentShape
     {
-        public ComponentTypes ComponentType => ComponentTypes.COMP_GEOMETRY;
-
-        private bool centerIsZero;
-
-        private float[] vertices;
-        private uint[] indices;
-
-        private int[] mVertexBufferObjectIDArray = new int[2];
-        public int VertexBuffer => shapeInfo.vertexBuffer;
-        public int ElementBuffer => shapeInfo.elementBuffer;
-        public int ElementCount => shapeInfo.elementCount;
-
-        private Shape2DManager.PolyMeta shapeInfo = new Shape2DManager.PolyMeta();
+        public override ComponentTypes ComponentType => ComponentTypes.COMP_GEOMETRY_2D;
         public ComponentShape2D(int sides, Vector2 size, bool centerIsZero = true)
         {
-            this.centerIsZero = centerIsZero;
-            shapeInfo = Shape2DManager.MakeRegularPolygon(sides, size, centerIsZero);
+            shapeInfo = ShapeManager.MakeRegularPolygon(sides, size, centerIsZero);
         }        
     }
 }

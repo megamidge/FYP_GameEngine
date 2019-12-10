@@ -29,13 +29,16 @@ namespace engine
 
         private void UpdateView()
         {
+
+            
+            view = Matrix4.CreateTranslation(new Vector3(0,0, 0));
             targetPosition = cameraPosition + cameraDirection;
-            view = Matrix4.LookAt(cameraPosition, targetPosition, cameraUp);
+            view *= Matrix4.LookAt(cameraPosition, targetPosition, cameraUp);
         }
         public void UpdateProjection()
         {
-            float aspect = Math.Max(SceneManager.Instance.Width, SceneManager.Instance.Height) / Math.Min(SceneManager.Instance.Width,SceneManager.Instance.Height);
-            projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(70), aspect, 0.1f, 1000);
+            float aspect = Math.Max((float)SceneManager.Instance.Width, SceneManager.Instance.Height) / Math.Min((float)SceneManager.Instance.Width, (float)SceneManager.Instance.Height);
+            projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(60), aspect, 0.1f, 5000);
         }
     }
 }

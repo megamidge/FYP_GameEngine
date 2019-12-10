@@ -51,10 +51,11 @@
     <Compile Include="Components\ComponentShape2D.cs" />
     <Compile Include="Components\ComponentShape3D.cs" />
     <Compile Include="Components\ComponentTransform.cs" />
+    <Compile Include="Components\ComponentShape.cs" />
     <Compile Include="EngineGameWindow.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Managers\ShaderManager.cs" />
-    <Compile Include="Managers\Shape2DManager.cs" />
+    <Compile Include="Managers\ShapeManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />
     <Compile Include="Components\IComponent.cs" />
     <Compile Include="IScene.cs" />
@@ -72,7 +73,13 @@
     <None Include="App.config" />
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
+    <None Include="Shaders\basicFragment3D.glsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Shaders\basicFragment.glsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\basicVertex3D.glsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\basicVertex.glsl">

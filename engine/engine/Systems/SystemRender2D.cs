@@ -11,7 +11,7 @@ namespace engine.Systems
 {
     class SystemRender2D : ISystem
     {
-        private const ComponentTypes MASK = (ComponentTypes.COMP_TRANSFORM | ComponentTypes.COMP_GEOMETRY);
+        private const ComponentTypes MASK = (ComponentTypes.COMP_TRANSFORM | ComponentTypes.COMP_GEOMETRY_2D);
 
         int shaderProgramID;
         public SystemRender2D()
@@ -28,10 +28,10 @@ namespace engine.Systems
             
             List<IComponent> entityComponents = entity.Components;
 
-            IComponent geometryComp = entityComponents.Find(c => c.ComponentType == ComponentTypes.COMP_GEOMETRY);
-            int vertBuffer = (geometryComp as ComponentShape2D).VertexBuffer;
-            int elBuffer = (geometryComp as ComponentShape2D).ElementBuffer;
-            int elementCount = (geometryComp as ComponentShape2D).ElementCount;
+            IComponent geometryComp = entityComponents.Find(c => c.ComponentType == ComponentTypes.COMP_GEOMETRY_2D);
+            int vertBuffer = (geometryComp as ComponentShape).VertexBuffer;
+            int elBuffer = (geometryComp as ComponentShape).ElementBuffer;
+            int elementCount = (geometryComp as ComponentShape).ElementCount;
 
             IComponent transformComp = entityComponents.Find(c => c.ComponentType == ComponentTypes.COMP_TRANSFORM);
             ComponentTransform transform = (ComponentTransform)transformComp;
@@ -40,8 +40,8 @@ namespace engine.Systems
             modelMat *= Matrix4.CreateRotationX(transform.Rotation.X);
             modelMat *= Matrix4.CreateRotationY(transform.Rotation.Y);
             modelMat *= Matrix4.CreateRotationZ(transform.Rotation.Z);
-            modelMat *= Matrix4.CreateTranslation(transform.Position);
             modelMat *= Matrix4.CreateScale(transform.Scale);
+            modelMat *= Matrix4.CreateTranslation(transform.Position);
 
             IComponent colourComp = entityComponents.Find(c => c.ComponentType == ComponentTypes.COMP_COLOUR);
             Vector4 colour = new Vector4(1, 1, 1, 1);

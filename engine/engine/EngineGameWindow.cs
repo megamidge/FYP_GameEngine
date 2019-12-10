@@ -21,6 +21,7 @@ namespace Engine
             //Cull back faces
             GL.Enable(EnableCap.CullFace);
             GL.CullFace(CullFaceMode.Back);
+            GL.FrontFace(FrontFaceDirection.Ccw);
 
             //Enable depth testing
             GL.Enable(EnableCap.DepthTest);

@@ -8,24 +8,35 @@ using System.Threading.Tasks;
 
 namespace engine.Managers
 {
-    static class Shape2DManager
+    static class ShapeManager
     {
-        private static Dictionary<PolyKey,PolyMeta> polygons = new Dictionary<PolyKey,PolyMeta>();
+        private static Dictionary<IPolyKey,PolyMeta> polygons = new Dictionary<IPolyKey,PolyMeta>();
         internal struct PolyMeta
         {
             internal int elementCount;
             internal int elementBuffer;
             internal int vertexBuffer;
         }
-        private struct PolyKey
+        private interface IPolyKey
         {
-            internal int sides;
+            int sides { get; set; }
+            bool centerIsZero { get; set; }
+        }
+        private struct PolyKey2D : IPolyKey
+        {
             internal Vector2 size;
-            internal bool centerIsZero;
+            public int sides { get; set; }
+            public bool centerIsZero { get; set; }
+        }
+        private struct PolyKey3D : IPolyKey
+        {
+            internal Vector3 size;
+            public bool centerIsZero { get; set; }
+            public int sides { get; set; }
         }
         internal static PolyMeta MakeRegularPolygon(int sides, Vector2 size, bool centerIsZero)
         {
-            PolyKey polyKey = new PolyKey()
+            PolyKey2D polyKey = new PolyKey2D()
             {
                 sides = sides,
                 size = size,
@@ -76,6 +87,81 @@ namespace engine.Managers
 
             return polyMeta;
             
+        }
+
+        internal static PolyMeta MakeCube(Vector3 size)
+        {
+            PolyKey3D polyKey = new PolyKey3D()
+            {
+                sides = 12,
+                size = size,
+                centerIsZero = true
+            };
+            if (polygons.ContainsKey(polyKey))
+                return polygons[polyKey];
+
+            float X = size.X / 2f;
+            float Y = size.Y / 2f;
+            float Z = size.Z / 2f;
+            float[] vertices = new float[]
+            {
+                //front
+                -X,-Y, Z, 0,0,1,
+                X,-Y,Z, 0,0,1,
+                X,Y,Z, 0,0,1,
+                -X,Y,Z, 0,0,1,
+
+                //right
+                X, -Y, -Z, 1,0,0,
+                X, Y, -Z, 1,0,0,
+                X, Y, Z, 1,0,0,
+                X, -Y, Z, 1,0,0,
+
+                //back
+                -X,-Y,-Z, 0, 0, -1,
+                -X,Y,-Z, 0, 0, -1,
+                X,Y,-Z, 0, 0, -1,
+                X,-Y,-Z, 0, 0, -1,
+
+                //left
+                -X,-Y,-Z,-1,0,0,
+                -X,-Y,Z,-1,0,0,
+                -X,Y,Z,-1,0,0,
+                -X,Y,-Z,-1,0,0,
+
+                //top
+                X,Y,Z,0,1,0,
+                -X,Y,-Z,0,1,0,
+                -X,Y,Z,0,1,0,
+                X,Y,-Z,0,1,0,
+
+                //bottom
+                -X,-Y,-Z,0,-1,0,
+                X,-Y,-Z,0,-1,0,
+                X,-Y,Z,0,-1,0,
+                -X,-Y,Z,0,-1,0,
+            };
+            uint[] indices = new uint[]
+            {
+                0,1,2,0,2,3,//front
+                4,5,6,4,6,7,//right
+                8,9,10,8,10,11,//back
+                12,13,14,12,14,15,//left
+                16,17,18,16,19,17,//top
+                20,21,22,20,22,23,//bottom
+            };
+            LoadShape(vertices, indices, out int vertBufferID, out int elBufferID);
+
+            PolyMeta polyMeta = new PolyMeta()
+            {
+                elementCount = indices.Length,
+                elementBuffer = elBufferID,
+                vertexBuffer = vertBufferID
+            };
+
+            polygons.Add(polyKey, polyMeta);
+
+            return polyMeta;
         }
 
         private static void LoadShape(float[] vertices, uint[] indices, out int vertexBuffer, out int elementBuffer)
