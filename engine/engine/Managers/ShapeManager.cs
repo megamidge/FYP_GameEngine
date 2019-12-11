@@ -45,12 +45,14 @@ namespace engine.Managers
             if (polygons.ContainsKey(polyKey)) //Just return an already made and loaded polygon if an identical one exists.
                 return polygons[polyKey];
 
-            float[] vertices = new float[2 + sides * 2];
+            int verts = (2 + sides * 2) * 2;
+            float[] vertices = new float[verts];
             vertices[0] = 0; vertices[1] = 0;
+            vertices[2] = 0.5f; vertices[3] = 0.5f;//Texture coords
             float count = 0; //Count is used to count the number of iterations to then get the correct angle to step to. the variable 'i' steps wrong and from too far so doesn't work.
             if (sides == 4)//Offset count for 4 sided shapes so they are oriented correctly.
                 count = .5f;
-            for (uint i = 2; i < 2 + sides * 2; i += 2)
+            for (uint i = 4; i < verts; i += 4)
             {
                 double theta = ((2f * Math.PI) / sides) * count;
                 count++;
@@ -60,6 +62,7 @@ namespace engine.Managers
                 if (!centerIsZero)
                 {
                     vertices[0] = size.X / 2f; vertices[1] = size.Y / 2f;
+                    vertices[2] = 0.5f; vertices[3] = 0.5f;//Texture coords
                     X += size.X / 2f;
                     Y += size.Y / 2f;
                 }
@@ -67,8 +70,15 @@ namespace engine.Managers
 
                 vertices[i] = (float)X;
                 vertices[i + 1] = (float)Y;
+                vertices[i + 2] = (float)(X+size.X/2f) / (size.X);//Texture coords
+                vertices[i + 3] = (float)(Y+size.Y/2f) / (size.Y);//Texture coords
+                if (!centerIsZero)//Texture coords:
+                {
+                    vertices[i + 2] = (float)X / size.X;
+                    vertices[i + 3] = (float)Y/size.Y;
+                }
             }
-
+            //TO-DO: Fix texture coords. They're very..very..very wrong.
             uint[] indices = new uint[sides + 2];
             for (uint i = 0; i < sides + 1; i++)
                 indices[i] = i;

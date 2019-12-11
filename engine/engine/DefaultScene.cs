@@ -42,12 +42,20 @@ namespace engine
             entity.AddComponent(new ComponentTransform(new Vector3(100, 100, -1f), new Vector3(0, 0, 0), new Vector3(1f, 1f, 1)));
             entity.AddComponent(new ComponentShape2D(4, new Vector2(100, 100)));
             entity.AddComponent(new ComponentColour(new Vector4(1, 0.8f, 0.5f, 1)));
+            entity.AddComponent(new ComponentTexture("Assets/Textures/texture2.jpg"));
+            entityManager.AddEntity(entity);
+
+            entity = new Entity("Square");
+            entity.AddComponent(new ComponentTransform(new Vector3(150, 150, -1f)));
+            entity.AddComponent(new ComponentShape2D(4, new Vector2(100, 100)));
+            entity.AddComponent(new ComponentTexture("Assets/Textures/texture2.jpg"));
             entityManager.AddEntity(entity);
 
             entity = new Entity("Triangle");
-            entity.AddComponent(new ComponentTransform(new Vector3(200, 259, -2f), new Vector3(0, 0, (float)Math.PI / 4), new Vector3(1f, 1f, 1)));
+            entity.AddComponent(new ComponentTransform(new Vector3(200, 259, -2f), new Vector3(0, 0, 0), new Vector3(1f, 1f, 1)));
             entity.AddComponent(new ComponentShape2D(3, new Vector2(200, 200)));
             entity.AddComponent(new ComponentColour(new Vector4(0, 1f, 0.2f, 1)));
+            entity.AddComponent(new ComponentTexture("Assets/Textures/texture2.jpg"));
             entityManager.AddEntity(entity);
 
             entity = new Entity("Rectangle");
@@ -56,15 +64,12 @@ namespace engine
             entity.AddComponent(new ComponentColour(new Vector4(0, 0f, 0.7f, 1)));
             entityManager.AddEntity(entity);
 
-            entity = new Entity("Square");
-            entity.AddComponent(new ComponentShape2D(4, new Vector2(100, 100), false));
-            entity.AddComponent(new ComponentTransform(new Vector3(20, 20, -1)));
-            entityManager.AddEntity(entity);
 
             entity = new Entity("Circle");
             entity.AddComponent(new ComponentShape2D(8, new Vector2(100, 100), false));
             entity.AddComponent(new ComponentTransform(new Vector3(0, 0, 0)));
             entity.AddComponent(new ComponentColour(new Vector4(0.3f, 0f, 0.7f, 1)));
+            entity.AddComponent(new ComponentTexture("Assets/Textures/texture2.jpg"));
             entityManager.AddEntity(entity);
 
             entity = new Entity("Cube");
@@ -146,7 +151,7 @@ namespace engine
             compTransform = (ComponentTransform)entity.Components.Find(c => c.ComponentType == ComponentTypes.COMP_TRANSFORM);
             rotation = compTransform.Rotation;
             rotation.Z -= (float)Math.PI / 10 * (float)e.Time;
-            compTransform.Rotation = rotation;
+            //compTransform.Rotation = rotation;
 
             //Animate cube(s)
             Entity[] entities = entityManager.Entities.FindAll(ent => ent.Name == "Cube").ToArray();

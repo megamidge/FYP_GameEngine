@@ -53,10 +53,10 @@ namespace engine.Systems
             if(textureComp != null)
                 texId = (textureComp as ComponentTexture).textureId;
 
-            Draw(modelMat, colour, vertBuffer, elBuffer, elementCount);
+            Draw(modelMat, colour, vertBuffer, elBuffer, elementCount, texId);
         }
 
-        private void Draw(Matrix4 modelMat, Vector4 colour, int vertBuffer, int elBuffer, int elementCount)
+        private void Draw(Matrix4 modelMat, Vector4 colour, int vertBuffer, int elBuffer, int elementCount, int textureId = -1)
         {
             GL.UseProgram(shaderProgramID);
 
@@ -74,12 +74,27 @@ namespace engine.Systems
             int uniColour = GL.GetUniformLocation(shaderProgramID, "Colour");
             GL.Uniform4(uniColour, colour);
 
+            if (textureId != -1)
+            {
+                int vTextureLocation = GL.GetAttribLocation(shaderProgramID, "vTexture");
+                GL.EnableVertexAttribArray(vTextureLocation);
+                GL.VertexAttribPointer(vTextureLocation, 2, VertexAttribPointerType.Float, false, 4 * sizeof(float), 2 * sizeof(float));
+                GL.BindTexture(TextureTarget.Texture2D, textureId);
+                int uniTextureSample = GL.GetUniformLocation(shaderProgramID, "textureSample");
+                GL.Uniform1(uniTextureSample, 1);
+            }
+            else
+            {
+                int uniTextureSample = GL.GetUniformLocation(shaderProgramID, "textureSample");
+                GL.Uniform1(uniTextureSample, 0);
+            }
+
             GL.BindBuffer(BufferTarget.ArrayBuffer, vertBuffer);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, elBuffer);
 
             int vPositionLocation = GL.GetAttribLocation(shaderProgramID, "vPosition");
             GL.EnableVertexAttribArray(vPositionLocation);
-            GL.VertexAttribPointer(vPositionLocation, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), 0);
+            GL.VertexAttribPointer(vPositionLocation, 2, VertexAttribPointerType.Float, false, 4 * sizeof(float), 0);
             
             GL.DrawElements(PrimitiveType.TriangleFan, elementCount, DrawElementsType.UnsignedInt, 0);
             GL.UseProgram(0);

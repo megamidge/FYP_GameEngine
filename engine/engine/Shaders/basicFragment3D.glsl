@@ -16,7 +16,7 @@ void main(){
 	//Color = texture2D(sTexture, v_FragTexCoord);
 
 	if(textureSample == 1){
-		vec4 textureColour = textureSample * texture(sTexture, v_FragTexCoord);
+		vec4 textureColour = texture2D(sTexture, v_FragTexCoord);
 		Color = textureColour;
 	}
 	else{
