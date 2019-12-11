@@ -14,6 +14,7 @@ namespace engine
         COMP_GEOMETRY_2D        = 1 << 1,
         COMP_GEOMETRY_3D        = 1 << 2,
         COMP_COLOUR             = 1 << 3,
+        COMP_TEXTURE            = 1 << 4,
     }
     interface IComponent
     {

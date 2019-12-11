@@ -22,7 +22,6 @@ namespace Engine
             GL.Enable(EnableCap.CullFace);
             GL.CullFace(CullFaceMode.Back);
             GL.FrontFace(FrontFaceDirection.Ccw);
-
             //Enable depth testing
             GL.Enable(EnableCap.DepthTest);
             GL.DepthMask(true);
@@ -74,7 +73,7 @@ namespace Engine
                 polyModeInt++;
                 if (polyModeInt > max)
                     polyModeInt = min;
-                GL.PolygonMode(MaterialFace.FrontAndBack, (PolygonMode)polyModeInt);
+                GL.PolygonMode(MaterialFace.Front, (PolygonMode)polyModeInt);
             }
         }
 

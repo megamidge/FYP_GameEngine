@@ -48,6 +48,11 @@ namespace engine.Systems
             if (colourComp != null)
                 colour = (colourComp as ComponentColour).Colour;
 
+            IComponent textureComp = entityComponents.Find(c => c.ComponentType == ComponentTypes.COMP_TEXTURE);
+            int texId = -1;
+            if(textureComp != null)
+                texId = (textureComp as ComponentTexture).textureId;
+
             Draw(modelMat, colour, vertBuffer, elBuffer, elementCount);
         }
 

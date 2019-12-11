@@ -10,8 +10,11 @@ namespace Engine
     {
         static void Main(string[] args)
         {
-            using (var gameWindow = new EngineGameWindow(800,450))
+            using (var gameWindow = new EngineGameWindow(800, 450))
+            {
+                gameWindow.VSync = OpenTK.VSyncMode.Off;
                 gameWindow.Run();
+            }
         }
     }
 }

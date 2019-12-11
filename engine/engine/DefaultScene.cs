@@ -25,7 +25,7 @@ namespace engine
 
             sceneManager.RenderEvent = Render;
             sceneManager.UpdateEvent = Update;
-            
+
             clearRed = 1f;
             clearBlue = 0f;
             clearGreen = 0f;
@@ -62,15 +62,21 @@ namespace engine
             entityManager.AddEntity(entity);
 
             entity = new Entity("Circle");
-            entity.AddComponent(new ComponentShape2D(8, new Vector2(100, 100),false));
-            entity.AddComponent(new ComponentTransform(new Vector3(0,0,0)));
+            entity.AddComponent(new ComponentShape2D(8, new Vector2(100, 100), false));
+            entity.AddComponent(new ComponentTransform(new Vector3(0, 0, 0)));
             entity.AddComponent(new ComponentColour(new Vector4(0.3f, 0f, 0.7f, 1)));
             entityManager.AddEntity(entity);
 
             entity = new Entity("Cube");
-            entity.AddComponent(new ComponentShape3D(new Vector3(250, 250, 250)));
-            entity.AddComponent(new ComponentTransform(new Vector3(0, 0, 0), new Vector3(MathHelper.DegreesToRadians(0),0,0), new Vector3(1)));
+            entity.AddComponent(new ComponentShape3D(new Vector3(200, 200, 200)));
+            entity.AddComponent(new ComponentTransform(new Vector3(0, 0, 0), new Vector3(MathHelper.DegreesToRadians(0), 0, 0), new Vector3(1)));
             entity.AddComponent(new ComponentColour(new Vector4(1, .2f, 0, 1f)));
+            entityManager.AddEntity(entity);
+            entity = new Entity("Cube");
+            entity.AddComponent(new ComponentShape3D(new Vector3(200, 200, 200)));
+            entity.AddComponent(new ComponentTransform(new Vector3(0, 0, 0), new Vector3(MathHelper.DegreesToRadians(0), MathHelper.DegreesToRadians(0), 0), new Vector3(1)));
+            entity.AddComponent(new ComponentColour(new Vector4(1, .2f, 0, 1f)));
+            entity.AddComponent(new ComponentTexture("Assets/Textures/texture2.jpg"));
             entityManager.AddEntity(entity);
         }
         private void CreateSystems()
@@ -142,14 +148,29 @@ namespace engine
             rotation.Z -= (float)Math.PI / 10 * (float)e.Time;
             compTransform.Rotation = rotation;
 
-            //Animate cube
-            entity = entityManager.Entities.Find(ent => ent.Name == "Cube");
-            compTransform = (ComponentTransform)entity.Components.Find(c => c.ComponentType == ComponentTypes.COMP_TRANSFORM);
+            //Animate cube(s)
+            Entity[] entities = entityManager.Entities.FindAll(ent => ent.Name == "Cube").ToArray();
+            compTransform = (ComponentTransform)entities[0].Components.Find(c => c.ComponentType == ComponentTypes.COMP_TRANSFORM);
             rotation = compTransform.Rotation;
             rotation.X += MathHelper.DegreesToRadians(25) * (float)e.Time;
             rotation.Y += MathHelper.DegreesToRadians(35) * (float)e.Time;
             rotation.Z += MathHelper.DegreesToRadians(55) * (float)e.Time;
             compTransform.Rotation = rotation;
+            Vector3 pos = compTransform.Position;
+            pos.X = (float)Math.Sin(time * Math.PI * 2 / 5) * 500;
+            pos.Y = (float)Math.Cos(time * Math.PI * 2 / 5) * 250;
+            compTransform.Position = pos;
+
+            compTransform = (ComponentTransform)entities[1].Components.Find(c => c.ComponentType == ComponentTypes.COMP_TRANSFORM);
+            rotation = compTransform.Rotation;
+            rotation.X -= MathHelper.DegreesToRadians(25) * (float)e.Time;
+            rotation.Y -= MathHelper.DegreesToRadians(35) * (float)e.Time;
+            rotation.Z -= MathHelper.DegreesToRadians(55) * (float)e.Time;
+            compTransform.Rotation = rotation;
+            pos = compTransform.Position;
+            pos.X = -(float)Math.Sin(time * Math.PI * 2 / 5) * 500;
+            pos.Y = -(float)Math.Cos(time * Math.PI * 2 / 5) * 250;
+            compTransform.Position = pos;
         }
         private bool upping = true;
         private bool horizontalling = true;
