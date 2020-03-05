@@ -34,6 +34,37 @@ namespace engine.Managers
             public bool centerIsZero { get; set; }
             public int sides { get; set; }
         }
+        private static PolyMeta MakeSquare(Vector2 size, bool centerIsZero)
+        {
+            float top = centerIsZero ? size.Y / 2f : size.Y;
+            float bottom = centerIsZero ? -size.Y / 2f : 0;
+            float left = centerIsZero ? -size.X / 2f : 0;
+            float right = centerIsZero ? size.X / 2f : size.X;
+            float[] vertices = new float[] {
+                left,   top, 0, 1,
+                right,  top, 1, 1,
+                right,  bottom, 1, 0,
+                left,   bottom, 0, 0
+            };
+            uint[] indices = new uint[] { 1, 0, 3, 2, 1, 3 }; 
+            
+            LoadShape(vertices, indices, out int vertBufferID, out int elBufferID);
+
+            PolyMeta polyMeta = new PolyMeta()
+            {
+                elementCount = indices.Length,
+                elementBuffer = elBufferID,
+                vertexBuffer = vertBufferID
+            }; 
+            PolyKey2D polyKey = new PolyKey2D()
+            {
+                sides = 4,
+                size = size,
+                centerIsZero = centerIsZero
+            };
+            polygons.Add(polyKey, polyMeta);
+            return polyMeta;
+        }
         internal static PolyMeta MakeRegularPolygon(int sides, Vector2 size, bool centerIsZero)
         {
             PolyKey2D polyKey = new PolyKey2D()
@@ -44,6 +75,8 @@ namespace engine.Managers
             };
             if (polygons.ContainsKey(polyKey)) //Just return an already made and loaded polygon if an identical one exists.
                 return polygons[polyKey];
+            if (sides == 4) //Make square differently, for now at least.
+                return MakeSquare(size, centerIsZero);
 
             int verts = (2 + sides * 2) * 2;
             float[] vertices = new float[verts];
@@ -190,8 +223,7 @@ namespace engine.Managers
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, buffers[1]);
             GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(indices.Length * sizeof(uint)),
             indices, BufferUsageHint.StaticDraw);
-            GL.GetBufferParameter(BufferTarget.ElementArrayBuffer, BufferParameterName.BufferSize, out
-            size);
+            GL.GetBufferParameter(BufferTarget.ElementArrayBuffer, BufferParameterName.BufferSize, out size);
             if (indices.Length * sizeof(uint) != size)
             {
                 throw new ApplicationException("Index data not loaded onto graphics card correctly");

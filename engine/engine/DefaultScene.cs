@@ -38,7 +38,9 @@ namespace engine
         }
         private void CreateEntities()
         {
-            Entity entity = new Entity("Bouncing_Square");
+            Entity entity;
+
+            entity = new Entity("Bouncing_Square");
             entity.AddComponent(new ComponentTransform(new Vector3(100, 100, -1f), new Vector3(0, 0, 0), new Vector3(1f, 1f, 1)));
             entity.AddComponent(new ComponentShape2D(4, new Vector2(100, 100)));
             entity.AddComponent(new ComponentColour(new Vector4(1, 0.8f, 0.5f, 1)));
@@ -63,7 +65,6 @@ namespace engine
             entity.AddComponent(new ComponentShape2D(4, new Vector2(200, 100)));
             entity.AddComponent(new ComponentColour(new Vector4(0, 0f, 0.7f, 1)));
             entityManager.AddEntity(entity);
-
 
             entity = new Entity("Circle");
             entity.AddComponent(new ComponentShape2D(8, new Vector2(100, 100), false));
