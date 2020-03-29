@@ -70,6 +70,9 @@ namespace engine.Systems
             int uniColour = GL.GetUniformLocation(shaderProgramID, "Colour");
             GL.Uniform4(uniColour, colour);
                        
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vertBuffer);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, elBuffer);
+
             if (textureId != -1)
             {
                 int vTextureLocation = GL.GetAttribLocation(shaderProgramID, "vTexture");
@@ -84,8 +87,6 @@ namespace engine.Systems
                 int uniTextureSample = GL.GetUniformLocation(shaderProgramID, "textureSample");
                 GL.Uniform1(uniTextureSample, 0);
             }
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vertBuffer);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, elBuffer);
 
             int vPositionLocation = GL.GetAttribLocation(shaderProgramID, "vPosition");
             GL.EnableVertexAttribArray(vPositionLocation);
@@ -96,8 +97,11 @@ namespace engine.Systems
 
             GL.DrawElements(PrimitiveType.Triangles, elementCount, DrawElementsType.UnsignedInt, 0);
 
-            GL.UseProgram(0);
+            //Unbind.
             GL.BindTexture(TextureTarget.Texture2D, 0);
+            GL.UseProgram(0);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, -1);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, -1);
         }
 
     }

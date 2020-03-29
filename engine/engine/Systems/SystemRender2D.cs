@@ -25,7 +25,7 @@ namespace engine.Systems
         {
             if ((entity.ComponentMask & MASK) != MASK)
                 return;
-            
+
             List<IComponent> entityComponents = entity.Components;
 
             IComponent geometryComp = entityComponents.Find(c => c.ComponentType == ComponentTypes.COMP_GEOMETRY_2D);
@@ -54,7 +54,7 @@ namespace engine.Systems
                 texId = (textureComp as ComponentTexture).textureId;
 
             Draw(modelMat, colour, vertBuffer, elBuffer, elementCount, texId);
-        }
+        } 
 
         private void Draw(Matrix4 modelMat, Vector4 colour, int vertBuffer, int elBuffer, int elementCount, int textureId = -1)
         {
@@ -74,11 +74,16 @@ namespace engine.Systems
             int uniColour = GL.GetUniformLocation(shaderProgramID, "Colour");
             GL.Uniform4(uniColour, colour);
 
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vertBuffer);
+
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, elBuffer);
+
             if (textureId != -1)
             {
                 int vTextureLocation = GL.GetAttribLocation(shaderProgramID, "vTexture");
                 GL.EnableVertexAttribArray(vTextureLocation);
                 GL.VertexAttribPointer(vTextureLocation, 2, VertexAttribPointerType.Float, false, 4 * sizeof(float), 2 * sizeof(float));
+
                 GL.BindTexture(TextureTarget.Texture2D, textureId);
                 int uniTextureSample = GL.GetUniformLocation(shaderProgramID, "textureSample");
                 GL.Uniform1(uniTextureSample, 1);
@@ -89,15 +94,18 @@ namespace engine.Systems
                 GL.Uniform1(uniTextureSample, 0);
             }
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vertBuffer);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, elBuffer);
 
             int vPositionLocation = GL.GetAttribLocation(shaderProgramID, "vPosition");
             GL.EnableVertexAttribArray(vPositionLocation);
             GL.VertexAttribPointer(vPositionLocation, 2, VertexAttribPointerType.Float, false, 4 * sizeof(float), 0);
             
             GL.DrawElements(PrimitiveType.TriangleFan, elementCount, DrawElementsType.UnsignedInt, 0);
+
+            //Unbind.
+            GL.BindTexture(TextureTarget.Texture2D, 0);
             GL.UseProgram(0);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, -1);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, -1);
         }
     }
 }

@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -71,6 +72,8 @@
     <Compile Include="Systems\ISystem.cs" />
     <Compile Include="Systems\SystemRender2D.cs" />
     <Compile Include="Systems\SystemRender3D.cs" />
+    <Compile Include="Text\BinaryReader.cs" />
+    <Compile Include="Text\TrueTypeFont.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
